@@ -1,0 +1,63 @@
+/* ==========================================================================
+  MAIN PAGE LAYOUT
+========================================================================== */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;          
+    justify-content: center; 
+    align-items: center;     
+    min-height: 100vh;      
+    background-color: #f8f9fa; /* Lighter, modern background */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* The <main> tag acts as our button wrapper.
+  We use flex-direction: column so the buttons stack vertically on mobile,
+  but we can use a row with wrap for desktop.
+*/
+main {
+    display: flex;
+    flex-wrap: wrap;       /* Allows buttons to move to next line if screen is small */
+    justify-content: center;
+    gap: 15px;             /* Modern way to add spacing between elements */
+    padding: 20px;
+}
+
+/* ==========================================================================
+  BUTTON STYLING
+========================================================================== */
+button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Hover effect for all buttons */
+button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* Click effect */
+button:active {
+    transform: translateY(0);
+    filter: brightness(0.9);
+}
+
+/* ==========================================================================
+  COLOR VARIANTS (Matching your toast types)
+========================================================================== */
+
+#defaultBtn { background-color: #333; color: #fff; }
+#infoBtn    { background-color: #0dcaf0; color: #333; }
+#successBtn { background-color: #198754; }
+#errorBtn   { background-color: #dc3545; }
+#warningBtn { background-color: #ffc107; color: #333; }
