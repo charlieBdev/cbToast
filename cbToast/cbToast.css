@@ -1,48 +1,73 @@
 /* ==========================================================================
-  1. TOAST CONTAINERS
+  1. TOAST CONTAINERS (Positioning & Stacking)
 ========================================================================== */
 .cb-toast-container {
     position: fixed !important;
     z-index: 9999;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     pointer-events: none;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    padding: 20px;
 }
 
-/* Positioning with 20px safety margin */
-.cb-toast-container.top-right    { top: 20px; right: 20px; align-items: flex-end; }
-.cb-toast-container.top-left     { top: 20px; left: 20px; align-items: flex-start; }
-.cb-toast-container.bottom-right { bottom: 20px; right: 20px; align-items: flex-end; }
-.cb-toast-container.bottom-left  { bottom: 20px; left: 20px; align-items: flex-start; }
+/* Corner Anchors */
+.cb-toast-container.top-right    { top: 0; right: 0; align-items: flex-end; }
+.cb-toast-container.top-left     { top: 0; left: 0; align-items: flex-start; }
+.cb-toast-container.bottom-right { bottom: 0; right: 0; align-items: flex-end; flex-direction: column-reverse; }
+.cb-toast-container.bottom-left  { bottom: 0; left: 0; align-items: flex-start; flex-direction: column-reverse; }
 
+/* Dead Center Layout */
 .cb-toast-container.center {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     align-items: center;
+    justify-content: center;
 }
 
 /* ==========================================================================
-  2. THE TOAST COMPONENT
+  2. THE TOAST COMPONENT (Theming & Core)
 ========================================================================== */
 .cb-toast {
+    /* Default Dark Mode Variables */
+    --toast-bg: #333333;
+    --toast-color: #ffffff;
+    --toast-border-rgba: rgba(255, 255, 255, 0.1);
+    --close-opacity: 0.6;
+    --shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+
     font-family: inherit;
     pointer-events: auto;
     width: 320px;
     max-width: calc(100vw - 40px);
-    background-color: #333;
-    color: #ffffff;
+    background-color: var(--toast-bg);
+    color: var(--toast-color);
     padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    box-sizing: border-box; 
+    box-shadow: var(--shadow);
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+
+    /* Animation: Initial State */
     opacity: 0;
-    transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28), 
+                opacity 0.3s ease;
 }
 
-/* Entrance Animations */
+/* Light Mode Overrides */
+.cb-toast[data-theme="light"] {
+    --toast-bg: #ffffff;
+    --toast-color: #212529;
+    --toast-border-rgba: rgba(0, 0, 0, 0.1);
+    --close-opacity: 0.4;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* --- Entrance Animations --- */
 .cb-toast-container.top-right .cb-toast,
 .cb-toast-container.bottom-right .cb-toast { transform: translateX(110%); }
 
@@ -51,6 +76,7 @@
 
 .cb-toast-container.center .cb-toast { transform: scale(0.8); }
 
+/* Show State */
 .cb-toast.show {
     opacity: 1;
     transform: translate(0, 0) scale(1) !important;
@@ -63,60 +89,84 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1); 
-    padding-bottom: 6px;
+    border-bottom: 2px solid var(--toast-border-rgba);
+    padding-bottom: 8px;
     margin-bottom: 10px;
-    position: relative; 
+    position: relative;
 }
 
-/* The shrinking bar */
 .cb-toast-header::after {
     content: '';
     position: absolute;
-    bottom: -2px;
+    bottom: -2px; /* Sits on the border-bottom */
     left: 0;
     height: 3px;
-    width: 100%; /* Start at 100% */
+    width: 100%; /* Default width */
     z-index: 1;
-    background-color: transparent; /* Default */
-    
-    /* Use the variable sent by JS, default to 0s if not found */
-    transition: width var(--duration, 0ms) linear; 
+    transition: width var(--duration, 0ms) linear;
+    background-color: transparent; /* Colored by theme below */
 }
 
-.cb-toast.show .cb-toast-header::after {
-    width: 100%;
-}
-
+/* Shrink trigger */
 .cb-toast.shrinking .cb-toast-header::after {
     width: 0% !important;
 }
 
-.cb-toast-title { font-size: 0.95rem; font-weight: 700; }
+.cb-toast-title { font-size: 0.95rem; font-weight: 700; letter-spacing: 0.3px; }
 .cb-toast-body { font-size: 0.88rem; line-height: 1.4; opacity: 0.9; }
 
 /* ==========================================================================
   4. CLOSE BUTTON
 ========================================================================== */
-.cb-close-btn {
+/* ==========================================================================
+  4. CLOSE BUTTON (Perfectly Centered)
+========================================================================== */
+.cb-toast-close-btn {
+    /* Reset defaults */
     background: none;
     border: none;
-    color: inherit;
-    font-family: Arial, sans-serif;
-    font-size: 1.4rem;
+    padding: 0;
+    margin: 0;
     cursor: pointer;
-    line-height: 1;
-    padding: 0 0 0 10px;
-    opacity: 0.6;
-    transition: opacity 0.2s ease;
+    
+    /* Layout: Flexbox is the key to centering */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Sizing the hit area */
+    width: 24px;
+    height: 24px;
+    
+    /* Typography */
+    color: inherit;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.6rem; /* Slightly larger for better "X" shape */
+    font-weight: bold;
+    
+    /* Visuals */
+    opacity: var(--close-opacity);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    
+    /* Optional: vertical offset tweak */
+    /* Some fonts sit high, if it still looks high, use: */
+    /* padding-top: 2px; */
 }
 
-.cb-close-btn:hover { opacity: 1; }
+.cb-toast-close-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
 
 /* ==========================================================================
-  5. COLOR THEMES
+  5. COLOR THEMES (Progress Bars)
 ========================================================================== */
-.cb-toast-default .cb-toast-header::after { background-color: rgba(255,255,255,0.6); }
+
+/* Default Bar */
+.cb-toast-default[data-theme="dark"] .cb-toast-header::after { background-color: rgba(255,255,255,0.5); }
+.cb-toast-default[data-theme="light"] .cb-toast-header::after { background-color: rgba(0,0,0,0.2); }
+
+/* Status Bars */
 .cb-toast-success .cb-toast-header::after { background-color: #198754; }
 .cb-toast-error   .cb-toast-header::after { background-color: #dc3545; }
 .cb-toast-warning .cb-toast-header::after { background-color: #ffc107; }

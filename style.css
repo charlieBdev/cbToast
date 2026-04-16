@@ -8,56 +8,102 @@ body {
     justify-content: center; 
     align-items: center;     
     min-height: 100vh;      
-    background-color: #f8f9fa; /* Lighter, modern background */
+    /* Neutral background helps both light and dark toasts pop */
+    background-color: #f8f9fa; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* The <main> tag acts as our button wrapper.
-  We use flex-direction: column so the buttons stack vertically on mobile,
-  but we can use a row with wrap for desktop.
+  Flex-wrap ensures that on mobile devices, buttons stack 
+  neatly rather than overflowing the screen.
 */
 main {
     display: flex;
-    flex-wrap: wrap;       /* Allows buttons to move to next line if screen is small */
+    flex-wrap: wrap;       
     justify-content: center;
-    gap: 15px;             /* Modern way to add spacing between elements */
-    padding: 20px;
+    align-items: center;
+    gap: 15px;             /* Space between buttons */
+    padding: 40px;         /* Extra padding for breathing room */
+    max-width: 800px;      /* Prevents the row from getting too wide on ultrawide monitors */
 }
 
 /* ==========================================================================
-  BUTTON STYLING
+  BUTTON STYLING (The "Trigger" Buttons)
 ========================================================================== */
-button {
+main button {
+    /* Layout & Sizing */
     padding: 12px 24px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
+    min-width: 140px;      /* Ensures buttons have a consistent visual weight */
+    
+    /* Style */
     cursor: pointer;
     border-radius: 8px;
     border: none;
-    color: white;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: white;          /* Default text color */
+    
+    /* Transitions: Using 'all' covers transform, filter, and box-shadow */
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+    /* Prevents blue highlight on mobile taps */
+    -webkit-tap-highlight-color: transparent; 
 }
 
-/* Hover effect for all buttons */
-button:hover {
-    filter: brightness(1.1);
+/* Interaction: Hover State */
+main button:hover {
+    filter: brightness(1.08); /* Subtle lightening */
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Click effect */
-button:active {
-    transform: translateY(0);
-    filter: brightness(0.9);
+/* Interaction: Active (Click) State */
+main button:active {
+    transform: translateY(1px); /* Pushes the button "into" the page */
+    filter: brightness(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* ==========================================================================
-  COLOR VARIANTS (Matching your toast types)
+  COLOR VARIANTS
 ========================================================================== */
 
-#defaultBtn { background-color: #333; color: #fff; }
-#infoBtn    { background-color: #0dcaf0; color: #333; }
-#successBtn { background-color: #198754; }
-#errorBtn   { background-color: #dc3545; }
-#warningBtn { background-color: #ffc107; color: #333; }
+/* Dark/Neutral Variants */
+#defaultBtn { 
+    background-color: #333333; 
+}
+
+#lightModeBtn { 
+    background-color: #6c757d; 
+}
+
+/* Status Variants (White Text) */
+#successBtn { 
+    background-color: #198754; 
+}
+
+#errorBtn { 
+    background-color: #dc3545; 
+}
+
+/* High-Contrast Variants (Dark Text)
+  We use #212529 instead of #333 for a slightly softer, more modern dark ink.
+*/
+#infoBtn { 
+    background-color: #0dcaf0; 
+    color: #212529; 
+}
+
+#warningBtn { 
+    background-color: #ffc107; 
+    color: #212529; 
+}
+
+/* ==========================================================================
+  ACCESSIBILITY & FOCUS
+========================================================================== */
+main button:focus-visible {
+    outline: 3px solid rgba(13, 110, 253, 0.5); /* Blue glow for keyboard users */
+    outline-offset: 2px;
+}
