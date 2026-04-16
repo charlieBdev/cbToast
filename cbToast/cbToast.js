@@ -10,8 +10,8 @@ export default class cbToast {
       title: "Notification",
       message: "Default message",
       type: "default",      // default, info, success, error, warning
-      duration: 0,       // 0 = persistent
       position: "center",   // top-left, top-right, bottom-left, bottom-right, center
+      duration: 0,          // 0 = persistent
       countdown: false,     // true to show the shrinking border
       maxStack: 5,          // Max toasts per position
       lightMode: false,     // Toggle light/dark theme

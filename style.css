@@ -19,12 +19,19 @@ body {
 */
 main {
     display: flex;
-    flex-wrap: wrap;       
+    flex-direction: column; /* This forces children to stack vertically */
+    align-items: center;    /* Keeps everything horizontally centered */
     justify-content: center;
-    align-items: center;
-    gap: 15px;             /* Space between buttons */
-    padding: 40px;         /* Extra padding for breathing room */
-    max-width: 800px;      /* Prevents the row from getting too wide on ultrawide monitors */
+    gap: 20px;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+#btn-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
 }
 
 /* ==========================================================================
