@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>cbToast Demo</title>
-  <link rel="stylesheet" href="./cbToast/cbToast.css">
+  <link rel="stylesheet" href="./dist/cbToast.min.css">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -22,7 +22,8 @@
           duration: <span style="color: #007bff;">4000</span>,
           countdown: <span style="color: #007bff;">true</span>,
           maxStack: <span style="color: #007bff;">5</span>,
-          lightMode: <span style="color: #007bff;">false</span>
+          lightMode: <span style="color: #007bff;">false</span>,
+          onClose: <span style="color: #28a745;">() =&gt; console.log('Toast closed')</span>
         });
       </pre>
     </section>

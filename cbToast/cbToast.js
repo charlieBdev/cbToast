@@ -15,6 +15,7 @@ export default class cbToast {
       countdown: false,     // true to show the shrinking border
       maxStack: 5,          // Max toasts per position
       lightMode: false,     // Toggle light/dark theme
+      onClose: null,
       ...options
     };
     
@@ -99,6 +100,11 @@ export default class cbToast {
     
     el.classList.remove('show');
     el.classList.remove('shrinking');
+
+    // Trigger the callback if it exists
+    if (typeof this.options.onClose === 'function') {
+      this.options.onClose();
+    }
 
     // Wait for the opacity/transform transition to finish before deleting from DOM
     el.addEventListener('transitionend', (e) => {

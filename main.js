@@ -1,8 +1,8 @@
 // Import the class from the subfolder
-import cbToast from './cbToast/cbToast.js';
+import cbToast from './dist/cbToast.min.js';
 
 /* ==========================================================================
-  1. STANDARD TOAST TRIGGERS
+    1. STANDARD TOAST TRIGGERS
 ========================================================================== */
 
 document.getElementById('defaultBtn').addEventListener('click', () => {
@@ -15,8 +15,9 @@ document.getElementById('infoBtn').addEventListener('click', () => {
         message: "This is an informational message.",
         type: "info",
         position: "top-right",
-        duration: 4000,
-        countdown: true
+        duration: 3000,
+        countdown: true,
+        onClose: () => console.log("Info toast closed")
     });
 });
 
@@ -26,20 +27,22 @@ document.getElementById('successBtn').addEventListener('click', () => {
         message: "Operation completed successfully!",
         type: "success",
         position: "bottom-right",
-        duration: 4000,
-        countdown: true
+        duration: 3000,
+        countdown: true,
+        onClose: () => console.log("Success toast closed")
     });
 });
 
 document.getElementById('warningBtn').addEventListener('click', () => {
-  new cbToast({
-    title: "Warning",
-    message: "This is a warning message.",
-    type: "warning",
-    position: "top-left",
-    duration: 4000,
-    countdown: true
-  });
+    new cbToast({
+        title: "Warning",
+        message: "This is a warning message.",
+        type: "warning",
+        position: "bottom-left",
+        duration: 3000,
+        countdown: true,
+        onClose: () => console.log("Warning toast closed")
+    });
 });
 
 document.getElementById('errorBtn').addEventListener('click', () => {
@@ -47,14 +50,15 @@ document.getElementById('errorBtn').addEventListener('click', () => {
         title: "Error",
         message: "Something went wrong!",
         type: "error",
-        position: "bottom-left",
-        duration: 4000,
-        countdown: true
+        position: "top-left",
+        duration: 3000,
+        countdown: true,
+        onClose: () => console.log("Error toast closed")
     });
 });
 
 /* ==========================================================================
-  2. LIGHT MODE CYCLING LOGIC
+    2. LIGHT MODE CYCLING LOGIC
 ========================================================================== */
 
 const toastConfigs = [
@@ -98,9 +102,9 @@ document.getElementById('lightModeBtn').addEventListener('click', () => {
     // Trigger the toast
     new cbToast({
         ...currentOptions, // Unpacks title, message, type, and position
+        duration: 3000,
+        countdown: true,
         lightMode: true,   // Force light mode for this button
-        duration: 4000,    // Standard duration for the cycle
-        countdown: true    // Show the shrinking bar
     });
 
     // Cycle index: 0, 1, 2, 3, 4, then back to 0

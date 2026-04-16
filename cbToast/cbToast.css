@@ -105,6 +105,7 @@
     z-index: 1;
     transition: width var(--duration, 0ms) linear;
     background-color: transparent; /* Colored by theme below */
+    pointer-events: none;
 }
 
 /* Shrink trigger */
