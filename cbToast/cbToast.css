@@ -1,5 +1,5 @@
 /* ==========================================================================
-  1. TOAST CONTAINERS (Fixed Positioning)
+  1. TOAST CONTAINERS
 ========================================================================== */
 .cb-toast-container {
     position: fixed !important;
@@ -8,17 +8,15 @@
     flex-direction: column;
     gap: 10px;
     pointer-events: none;
-    /* Ensure padding is calculated within the width */
     box-sizing: border-box; 
 }
 
-/* Corner Anchors - We add 20px to the edges so they are never "off-screen" */
+/* Positioning with 20px safety margin */
 .cb-toast-container.top-right    { top: 20px; right: 20px; align-items: flex-end; }
 .cb-toast-container.top-left     { top: 20px; left: 20px; align-items: flex-start; }
 .cb-toast-container.bottom-right { bottom: 20px; right: 20px; align-items: flex-end; }
 .cb-toast-container.bottom-left  { bottom: 20px; left: 20px; align-items: flex-start; }
 
-/* Dead Center Layout */
 .cb-toast-container.center {
     top: 50%;
     left: 50%;
@@ -27,43 +25,39 @@
 }
 
 /* ==========================================================================
-  2. THE TOAST COMPONENT (Width & Animation)
+  2. THE TOAST COMPONENT
 ========================================================================== */
 .cb-toast {
     font-family: inherit;
     pointer-events: auto;
-    width: 300px; /* Set a specific width */
-    max-width: calc(100vw - 40px); /* Never wider than the screen minus margins */
+    width: 320px;
+    max-width: calc(100vw - 40px);
     background-color: #333;
     color: #ffffff;
     padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-    box-sizing: border-box; /* Crucial for padding */
-    
-    /* Animation: Initial State */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box; 
     opacity: 0;
-    transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28), 
-                opacity 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.3s ease;
 }
 
-/* Directional Entrances - Slide from slightly further out */
+/* Entrance Animations */
 .cb-toast-container.top-right .cb-toast,
-.cb-toast-container.bottom-right .cb-toast { transform: translateX(120%); }
+.cb-toast-container.bottom-right .cb-toast { transform: translateX(110%); }
 
 .cb-toast-container.top-left .cb-toast,
-.cb-toast-container.bottom-left .cb-toast { transform: translateX(-120%); }
+.cb-toast-container.bottom-left .cb-toast { transform: translateX(-110%); }
 
 .cb-toast-container.center .cb-toast { transform: scale(0.8); }
 
-/* Common Show State - Reset everything to 0 */
 .cb-toast.show {
     opacity: 1;
-    transform: translateX(0) translateY(0) scale(1) !important;
+    transform: translate(0, 0) scale(1) !important;
 }
 
 /* ==========================================================================
-  3. INTERNAL ELEMENTS (Structure)
+  3. HEADER & COUNTDOWN BAR
 ========================================================================== */
 .cb-toast-header {
     display: flex;
@@ -72,13 +66,37 @@
     border-bottom: 2px solid rgba(255, 255, 255, 0.1); 
     padding-bottom: 6px;
     margin-bottom: 10px;
+    position: relative; 
+}
+
+/* The shrinking bar */
+.cb-toast-header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 3px;
+    width: 100%; /* Start at 100% */
+    z-index: 1;
+    background-color: transparent; /* Default */
+    
+    /* Use the variable sent by JS, default to 0s if not found */
+    transition: width var(--duration, 0ms) linear; 
+}
+
+.cb-toast.show .cb-toast-header::after {
+    width: 100%;
+}
+
+.cb-toast.shrinking .cb-toast-header::after {
+    width: 0% !important;
 }
 
 .cb-toast-title { font-size: 0.95rem; font-weight: 700; }
 .cb-toast-body { font-size: 0.88rem; line-height: 1.4; opacity: 0.9; }
 
 /* ==========================================================================
-  4. INTERACTIVE ELEMENTS (Close Button)
+  4. CLOSE BUTTON
 ========================================================================== */
 .cb-close-btn {
     background: none;
@@ -90,12 +108,16 @@
     line-height: 1;
     padding: 0 0 0 10px;
     opacity: 0.6;
+    transition: opacity 0.2s ease;
 }
+
+.cb-close-btn:hover { opacity: 1; }
 
 /* ==========================================================================
   5. COLOR THEMES
 ========================================================================== */
-.cb-toast-success .cb-toast-header { border-bottom-color: #198754; }
-.cb-toast-error   .cb-toast-header { border-bottom-color: #dc3545; }
-.cb-toast-warning .cb-toast-header { border-bottom-color: #ffc107; }
-.cb-toast-info    .cb-toast-header { border-bottom-color: #0dcaf0; }
+.cb-toast-default .cb-toast-header::after { background-color: rgba(255,255,255,0.6); }
+.cb-toast-success .cb-toast-header::after { background-color: #198754; }
+.cb-toast-error   .cb-toast-header::after { background-color: #dc3545; }
+.cb-toast-warning .cb-toast-header::after { background-color: #ffc107; }
+.cb-toast-info    .cb-toast-header::after { background-color: #0dcaf0; }

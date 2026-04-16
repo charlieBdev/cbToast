@@ -15,7 +15,8 @@ infoBtn.addEventListener('click', () => {
         message: "This is an informational message.",
         type: "info",
         position: "top-right",
-        duration: 4000
+        duration: 4000,
+        countdown: true
     });
 });
 
@@ -28,7 +29,8 @@ successBtn.addEventListener('click', () => {
         message: "Package Loaded Successfully!",
         type: "success",
         position: "bottom-right",
-        duration: 4000
+        duration: 4000,
+        countdown: true
     });
 });
 
@@ -40,7 +42,8 @@ errorBtn.addEventListener('click', () => {
         message: "Something went wrong!",
         type: "error",
         position: "bottom-left",
-        duration: 4000
+        duration: 4000,
+        countdown: true
     });
 });
 
@@ -52,6 +55,7 @@ warningBtn.addEventListener('click', () => {
         message: "This is a warning message.",
         type: "warning",
         position: "top-left",
-        duration: 4000
+        duration: 4000,
+        countdown: true
     });
 });

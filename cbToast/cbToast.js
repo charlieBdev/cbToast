@@ -4,25 +4,21 @@
 export default class cbToast {
   constructor(options = {}) {
     // 1. DEFAULT SETTINGS
-    // These apply if the user doesn't provide their own values.
     this.options = {
       title: "Notification",
       message: "Default Message",
       type: "default",      // default, info, success, error, warning
-      duration: 0,    // 0 = persistent (won't auto-hide)
-      position: "center", // top-left, top-right, bottom-left, bottom-right, center
+      duration: 0,          // 0 = persistent
+      position: "center",   // top-left, top-right, bottom-left, bottom-right, center
+      countdown: false,     // true to show the shrinking border
+      maxStack: 5,          // Max toasts per position before auto-removing oldest
       ...options 
     };
     
     this.#init();
   }
 
-  /**
-   * INITIALIZATION
-   * Finds or creates the fixed container on the screen.
-   */
   #init() {
-    // Check if a container for this specific position already exists
     let container = document.querySelector(`.cb-toast-container.${this.options.position}`);
     
     if (!container) {
@@ -32,17 +28,22 @@ export default class cbToast {
     }
     
     this.container = container;
+
+    // --- MAX STACK LOGIC ---
+    // If we already have too many toasts in this container, remove the oldest one
+    const existingToasts = this.container.querySelectorAll('.cb-toast');
+    if (existingToasts.length >= this.options.maxStack) {
+        // The first one in the DOM is the oldest
+        const oldest = existingToasts[0];
+        // We call remove directly to trigger the exit animation
+        this.remove(oldest);
+    }
+
     this.#createToast();
   }
 
-  /**
-   * DOM CREATION
-   * Builds the HTML structure of the toast.
-   */
   #createToast() {
     const el = document.createElement('div');
-    
-    // Apply classes for styling and color themes
     el.className = `cb-toast cb-toast-${this.options.type}`;
     
     el.innerHTML = `
@@ -50,17 +51,27 @@ export default class cbToast {
         <strong class="cb-toast-title">${this.options.title}</strong>
         <button class="cb-close-btn" aria-label="Close">&times;</button>
       </div>
-      <div class="cb-toast-body">
-        ${this.options.message}
-      </div>
+      <div class="cb-toast-body">${this.options.message}</div>
     `;
 
-    // Add to the screen container
     this.container.appendChild(el);
     
-    // TRIGGER ANIMATION
-    // Small timeout ensures the browser registers the element before sliding it in
-    setTimeout(() => el.classList.add('show'), 10);
+    const canShowCountdown = this.options.countdown && this.options.duration > 0;
+
+    // Trigger Entrance and Countdown
+    setTimeout(() => {
+      el.classList.add('show');
+      
+      if (canShowCountdown) {
+        const header = el.querySelector('.cb-toast-header');
+        
+        // Set the variable instead of the transition property
+        header.style.setProperty('--duration', `${this.options.duration}ms`);
+        
+        // Adding this class triggers the width change to 0% in the CSS
+        el.classList.add('shrinking');
+      }
+    }, 10);
 
     // AUTO-HIDE LOGIC
     if (this.options.duration > 0) {
@@ -75,21 +86,17 @@ export default class cbToast {
     };
   }
 
-  /**
-   * REMOVAL
-   * Handles the exit animation and deletes the element from the DOM.
-   */
   remove(el) {
-    // 1. Start the exit animation (CSS transform/opacity)
     el.classList.remove('show');
+    el.classList.remove('shrinking');
 
-    // 2. Wait for the transition to finish (0.3s) before fully deleting
-    el.addEventListener('transitionend', () => {
-      el.remove();
-      
-      // CLEANUP: If the container is empty, remove it to keep the DOM tidy
-      if (this.container && this.container.childNodes.length === 0) {
-        this.container.remove();
+    el.addEventListener('transitionend', (e) => {
+      // Important: Only remove if the main toast element finished its transition
+      if (e.target === el) {
+        el.remove();
+        if (this.container && this.container.childNodes.length === 0) {
+          this.container.remove();
+        }
       }
     }, { once: true });
   }
