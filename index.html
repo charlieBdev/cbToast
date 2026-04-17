@@ -12,21 +12,27 @@
   <main>
     <h1>cbToast Demo</h1>
 
-    <section id="demo-instructions" style="margin-bottom: 30px; width: 100%; max-width: 600px;">
-      <pre style="background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 12px; text-align: left; font-size: 0.85rem; line-height: 1.5; box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow-x: auto;">
-        <span style="color: #569cd6;">cbToast</span>({
-          title: <span style="color: #ce9178;">'Success'</span>,
-          message: <span style="color: #ce9178;">'Item Saved!'</span>,
-          type: <span style="color: #ce9178;">'success'</span>,
-          position: <span style="color: #ce9178;">'bottom-right'</span>,
-          duration: <span style="color: #b5cea8;">4000</span>,
-          countdown: <span style="color: #569cd6;">true</span>,
-          maxStack: <span style="color: #b5cea8;">5</span>,
-          lightMode: <span style="color: #569cd6;">false</span>,
-          onClose: () =&gt; <span style="color: #4ec9b0;">console</span>.log(<span style="color: #ce9178;">'Toast closed'</span>)
-        });
-      </pre>
+    <section id="demo-instructions">
+      <div class="code-window">
+        <div class="window-header">
+          <div class="action-btns">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="window-title">main.js</div>
+        </div>
+        <pre><code><span class="keyword">new</span> <span class="method">cbToast</span>({
+          title: <span class="string">'Success'</span>,
+          message: <span class="string">'Item Saved!'</span>,
+          type: <span class="string">'success'</span>,
+          position: <span class="string">'bottom-right'</span>,
+          duration: <span class="number">4000</span>,
+          countdown: <span class="keyword">true</span>,
+          maxStack: <span class="number">5</span>,
+          onClose: () => <span class="console">console</span>.<span class="method">log</span>(<span class="string">'Closed!'</span>)
+        });</code></pre>
+      </div>
     </section>
+
     <section id="btn-container">
       <button id="defaultBtn">Default Toast</button>
       <button id="infoBtn">Info Toast</button>
@@ -38,6 +44,5 @@
   </main>
 
   <script type="module" src="./main.js"></script>
-  <!-- <script type="module" src="./cbToast/cbToast.js"></script> -->
 </body>
 </html>

@@ -8,7 +8,6 @@ body {
     justify-content: center; 
     align-items: center;     
     min-height: 100vh;
-    /* This prevents small shifts if a scrollbar appears */
     width: 100vw;
     overflow-x: hidden;      
     background-color: #f8f9fa; 
@@ -20,49 +19,84 @@ main {
     flex-direction: column; 
     align-items: center;    
     justify-content: center;
-    gap: 20px;
+    gap: 30px;
     padding: 20px;
     width: 100%;
-    max-width: 800px; /* Limits width on desktop for better readability */
+    max-width: 650px; /* Sweeter spot for readability */
     box-sizing: border-box;
 }
 
 h1 {
-    margin-top: 0;
+    margin: 0;
     color: #212529;
     font-weight: 800;
+    font-size: 2.5rem;
 }
 
-/* --- The Code Block --- */
-#demo-instructions {
-    width: 100%;
-    margin-bottom: 20px;
-}
+/* ==========================================================================
+  CODE WINDOW (VS CODE STYLE)
+========================================================================== */
+#demo-instructions { width: 100%; }
 
-#demo-instructions pre {
-    background: #212529; /* Darker, high-contrast code block */
-    color: #f8f9fa;
-    padding: 20px;
+.code-window {
+    background: #1e1e1e;
     border-radius: 12px;
-    font-size: 0.85rem;
-    overflow-x: auto; /* Allows code to scroll if the screen is tiny */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    margin: 0;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* --- Button Grid --- */
+.window-header {
+    background: #252526;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.action-btns { display: flex; gap: 8px; }
+.action-btns span { width: 12px; height: 12px; border-radius: 50%; }
+.action-btns span:nth-child(1) { background: #ff5f56; }
+.action-btns span:nth-child(2) { background: #ffbd2e; }
+.action-btns span:nth-child(3) { background: #27c93f; }
+
+.window-title {
+    flex-grow: 1;
+    text-align: center;
+    color: #858585;
+    font-size: 0.75rem;
+    margin-right: 40px; /* Balances the dots */
+}
+
+.code-window pre {
+    margin: 0;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.code-window code {
+    color: #d4d4d4;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Syntax Highlighting */
+.keyword { color: #569cd6; } 
+.string  { color: #ce9178; } 
+.number  { color: #b5cea8; } 
+.console { color: #4ec9b0; } 
+.method  { color: #dcdcaa; }
+
+/* ==========================================================================
+  BUTTON GRID
+========================================================================== */
 #btn-container {
     display: grid;
-    /* Creates a responsive grid: buttons will be at least 160px, 
-       but will fill the available space evenly */
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 15px;
     width: 100%;
 }
 
-/* ==========================================================================
-  BUTTON STYLING
-========================================================================== */
 main button {
     padding: 14px 20px;
     font-size: 0.9rem;
@@ -79,23 +113,13 @@ main button {
 main button:hover {
     filter: brightness(1.1);
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
-main button:active {
-    transform: translateY(0);
-}
-
-/* --- Color Variants --- */
-#defaultBtn  { background-color: #212529; }
+/* Color Variants */
+#defaultBtn   { background-color: #212529; }
 #lightModeBtn { background-color: #adb5bd; color: #212529; }
-#successBtn  { background-color: #198754; }
-#errorBtn    { background-color: #dc3545; }
-#infoBtn     { background-color: #0dcaf0; color: #212529; }
-#warningBtn  { background-color: #ffc107; color: #212529; }
-
-/* Focus glow for accessibility */
-main button:focus-visible {
-    outline: 3px solid rgba(13, 110, 253, 0.5);
-    outline-offset: 2px;
-}
+#successBtn   { background-color: #198754; }
+#errorBtn     { background-color: #dc3545; }
+#infoBtn      { background-color: #0dcaf0; color: #212529; }
+#warningBtn   { background-color: #ffc107; color: #212529; }
