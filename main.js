@@ -1,5 +1,4 @@
-// Import the class from the subfolder
-import cbToast from './dist/cbToast.min.js';
+import cbToast from './cbToast/cbToast.js';
 
 /* ==========================================================================
     1. STANDARD TOAST TRIGGERS

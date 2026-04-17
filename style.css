@@ -7,110 +7,95 @@ body {
     display: flex;          
     justify-content: center; 
     align-items: center;     
-    min-height: 100vh;      
-    /* Neutral background helps both light and dark toasts pop */
+    min-height: 100vh;
+    /* This prevents small shifts if a scrollbar appears */
+    width: 100vw;
+    overflow-x: hidden;      
     background-color: #f8f9fa; 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* The <main> tag acts as our button wrapper.
-  Flex-wrap ensures that on mobile devices, buttons stack 
-  neatly rather than overflowing the screen.
-*/
 main {
     display: flex;
-    flex-direction: column; /* This forces children to stack vertically */
-    align-items: center;    /* Keeps everything horizontally centered */
+    flex-direction: column; 
+    align-items: center;    
     justify-content: center;
     gap: 20px;
     padding: 20px;
-    min-height: 100vh;
+    width: 100%;
+    max-width: 800px; /* Limits width on desktop for better readability */
+    box-sizing: border-box;
 }
 
+h1 {
+    margin-top: 0;
+    color: #212529;
+    font-weight: 800;
+}
+
+/* --- The Code Block --- */
+#demo-instructions {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#demo-instructions pre {
+    background: #212529; /* Darker, high-contrast code block */
+    color: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    overflow-x: auto; /* Allows code to scroll if the screen is tiny */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin: 0;
+}
+
+/* --- Button Grid --- */
 #btn-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    /* Creates a responsive grid: buttons will be at least 160px, 
+       but will fill the available space evenly */
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 15px;
+    width: 100%;
 }
 
 /* ==========================================================================
-  BUTTON STYLING (The "Trigger" Buttons)
+  BUTTON STYLING
 ========================================================================== */
 main button {
-    /* Layout & Sizing */
-    padding: 12px 24px;
-    font-size: 0.95rem;
+    padding: 14px 20px;
+    font-size: 0.9rem;
     font-weight: 600;
-    min-width: 140px;      /* Ensures buttons have a consistent visual weight */
-    
-    /* Style */
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 10px;
     border: none;
-    color: white;          /* Default text color */
-    
-    /* Transitions: Using 'all' covers transform, filter, and box-shadow */
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    
-    /* Prevents blue highlight on mobile taps */
+    color: white;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     -webkit-tap-highlight-color: transparent; 
 }
 
-/* Interaction: Hover State */
 main button:hover {
-    filter: brightness(1.08); /* Subtle lightening */
+    filter: brightness(1.1);
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Interaction: Active (Click) State */
 main button:active {
-    transform: translateY(1px); /* Pushes the button "into" the page */
-    filter: brightness(0.95);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
 }
 
-/* ==========================================================================
-  COLOR VARIANTS
-========================================================================== */
+/* --- Color Variants --- */
+#defaultBtn  { background-color: #212529; }
+#lightModeBtn { background-color: #adb5bd; color: #212529; }
+#successBtn  { background-color: #198754; }
+#errorBtn    { background-color: #dc3545; }
+#infoBtn     { background-color: #0dcaf0; color: #212529; }
+#warningBtn  { background-color: #ffc107; color: #212529; }
 
-/* Dark/Neutral Variants */
-#defaultBtn { 
-    background-color: #333333; 
-}
-
-#lightModeBtn { 
-    background-color: #6c757d; 
-}
-
-/* Status Variants (White Text) */
-#successBtn { 
-    background-color: #198754; 
-}
-
-#errorBtn { 
-    background-color: #dc3545; 
-}
-
-/* High-Contrast Variants (Dark Text)
-  We use #212529 instead of #333 for a slightly softer, more modern dark ink.
-*/
-#infoBtn { 
-    background-color: #0dcaf0; 
-    color: #212529; 
-}
-
-#warningBtn { 
-    background-color: #ffc107; 
-    color: #212529; 
-}
-
-/* ==========================================================================
-  ACCESSIBILITY & FOCUS
-========================================================================== */
+/* Focus glow for accessibility */
 main button:focus-visible {
-    outline: 3px solid rgba(13, 110, 253, 0.5); /* Blue glow for keyboard users */
+    outline: 3px solid rgba(13, 110, 253, 0.5);
     outline-offset: 2px;
 }

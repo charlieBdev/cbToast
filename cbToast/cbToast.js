@@ -22,6 +22,14 @@ export default class cbToast {
     this.#init();
   }
 
+  /**
+   * STATIC METHOD: Allows calling cbToast.show({...}) 
+   * instead of using the 'new' keyword.
+   */
+  static show(options) {
+    return new cbToast(options);
+  }
+
   #init() {
     // Check for existing container or create a new one for this position
     let container = document.querySelector(`.cb-toast-container.${this.options.position}`);
@@ -51,12 +59,13 @@ export default class cbToast {
     const theme = this.options.lightMode ? 'light' : 'dark';
     el.setAttribute('data-theme', theme);
     
+    // Apply classes for type (e.g., cb-toast-success)
     el.className = `cb-toast cb-toast-${this.options.type}`;
     
     el.innerHTML = `
       <div class="cb-toast-header">
         <strong class="cb-toast-title">${this.options.title}</strong>
-        <button class="cb-toast-close-btn" aria-label="Close">&times;</button>
+        <button class="cb-toast-close-btn" aria-label="Close">×</button>
       </div>
       <div class="cb-toast-body">${this.options.message}</div>
     `;
@@ -96,8 +105,9 @@ export default class cbToast {
    * @param {HTMLElement} el - The toast element to remove
    */
   remove(el) {
-    if (!el) return;
-    
+    if (!el || el.dataset.removing) return; 
+    el.dataset.removing = "true"; // Prevent double-triggering
+
     el.classList.remove('show');
     el.classList.remove('shrinking');
 
@@ -106,10 +116,16 @@ export default class cbToast {
       this.options.onClose();
     }
 
+    // Fallback: If the transition fails to fire (e.g. reduced motion), delete after 400ms
+    const fallback = setTimeout(() => {
+        if (el.parentNode) el.remove();
+    }, 400);
+
     // Wait for the opacity/transform transition to finish before deleting from DOM
     el.addEventListener('transitionend', (e) => {
       // Ensure we are reacting to the main toast transition, not the inner bar
       if (e.target === el) {
+        clearTimeout(fallback);
         el.remove();
         
         // Cleanup the container if it's now empty

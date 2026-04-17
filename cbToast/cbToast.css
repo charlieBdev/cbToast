@@ -1,5 +1,5 @@
 /* ==========================================================================
-  1. TOAST CONTAINERS (Positioning & Stacking)
+    1. TOAST CONTAINERS (Positioning & Stacking)
 ========================================================================== */
 .cb-toast-container {
     position: fixed !important;
@@ -28,15 +28,20 @@
 }
 
 /* ==========================================================================
-  2. THE TOAST COMPONENT (Theming & Core)
+    2. THE TOAST COMPONENT (Bootstrap 5.3 Theme Alignment)
 ========================================================================== */
 .cb-toast {
-    /* Default Dark Mode Variables */
-    --toast-bg: #333333;
-    --toast-color: #ffffff;
-    --toast-border-rgba: rgba(255, 255, 255, 0.1);
-    --close-opacity: 0.6;
-    --shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    /** * UPDATED DARK MODE: 
+     * We use #343a40 (bs-gray-800) for the toast surface. 
+     * This is slightly lighter than the standard BS dark background (#212529),
+     * providing the "elevation" needed to stand out.
+     */
+    --toast-bg: #343a40;          
+    --toast-color: #f8f9fa;       
+    --toast-border-rgba: rgba(255, 255, 255, 0.15);
+    --close-opacity: 0.5;
+    /* Stronger shadow for better pop on dark backgrounds */
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 
     font-family: inherit;
     pointer-events: auto;
@@ -50,6 +55,7 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
+    border: 1px solid var(--toast-border-rgba);
 
     /* Animation: Initial State */
     opacity: 0;
@@ -57,14 +63,13 @@
                 opacity 0.3s ease;
 }
 
-/* Light Mode Overrides */
+/* Light Mode Overrides (BS 5.3 "Light" colors) */
 .cb-toast[data-theme="light"] {
-    --toast-bg: #ffffff;
-    --toast-color: #212529;
-    --toast-border-rgba: rgba(0, 0, 0, 0.1);
+    --toast-bg: #ffffff;          /* bs-body-bg */
+    --toast-color: #212529;       /* bs-body-color */
+    --toast-border-rgba: rgba(0, 0, 0, 0.175);
     --close-opacity: 0.4;
-    --shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 /* --- Entrance Animations --- */
@@ -83,7 +88,7 @@
 }
 
 /* ==========================================================================
-  3. HEADER & COUNTDOWN BAR
+    3. HEADER & COUNTDOWN BAR
 ========================================================================== */
 .cb-toast-header {
     display: flex;
@@ -98,13 +103,13 @@
 .cb-toast-header::after {
     content: '';
     position: absolute;
-    bottom: -2px; /* Sits on the border-bottom */
+    bottom: -2px; 
     left: 0;
     height: 3px;
-    width: 100%; /* Default width */
+    width: 100%; 
     z-index: 1;
     transition: width var(--duration, 0ms) linear;
-    background-color: transparent; /* Colored by theme below */
+    background-color: transparent; 
     pointer-events: none;
 }
 
@@ -117,57 +122,47 @@
 .cb-toast-body { font-size: 0.88rem; line-height: 1.4; opacity: 0.9; }
 
 /* ==========================================================================
-  4. CLOSE BUTTON
-========================================================================== */
-/* ==========================================================================
-  4. CLOSE BUTTON (Perfectly Centered)
+    4. CLOSE BUTTON (Lean & Centered)
 ========================================================================== */
 .cb-toast-close-btn {
-    /* Reset defaults */
     background: none;
     border: none;
     padding: 0;
     margin: 0;
     cursor: pointer;
     
-    /* Layout: Flexbox is the key to centering */
     display: flex;
     align-items: center;
     justify-content: center;
     
-    /* Sizing the hit area */
     width: 24px;
     height: 24px;
-    
-    /* Typography */
     color: inherit;
-    font-family: 'Arial', sans-serif;
-    font-size: 1.6rem; /* Slightly larger for better "X" shape */
-    font-weight: bold;
     
-    /* Visuals */
+    /* Using system font stack for the best thin rendering */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.5rem; 
+    font-weight: 200; /* Ultra-thin weight */
+    line-height: 1;
+    
     opacity: var(--close-opacity);
     transition: opacity 0.2s ease, transform 0.2s ease;
-    
-    /* Optional: vertical offset tweak */
-    /* Some fonts sit high, if it still looks high, use: */
-    /* padding-top: 2px; */
 }
 
 .cb-toast-close-btn:hover {
     opacity: 1;
-    transform: scale(1.1);
+    transform: rotate(90deg); /* Modern interaction touch */
 }
 
 /* ==========================================================================
-  5. COLOR THEMES (Progress Bars)
+    5. COLOR THEMES (Progress Bars)
 ========================================================================== */
 
 /* Default Bar */
 .cb-toast-default[data-theme="dark"] .cb-toast-header::after { background-color: rgba(255,255,255,0.5); }
 .cb-toast-default[data-theme="light"] .cb-toast-header::after { background-color: rgba(0,0,0,0.2); }
 
-/* Status Bars */
+/* Status Bars (Bootstrap-aligned Primary Colors) */
 .cb-toast-success .cb-toast-header::after { background-color: #198754; }
 .cb-toast-error   .cb-toast-header::after { background-color: #dc3545; }
 .cb-toast-warning .cb-toast-header::after { background-color: #ffc107; }
