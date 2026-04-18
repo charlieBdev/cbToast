@@ -13,50 +13,43 @@ const toastIcons = {
 
 export default class cbToast {
   constructor(options = {}) {
-    // 1. DEFAULT SETTINGS
     this.options = {
       title: 'Notification',
       icon: true,
       message: 'Message',
-      type: "default",        // default, info, success, error, warning
-      position: "center",     // top-left, top-right, bottom-left, bottom-right, center
-      duration: 3000,         // 0 = persistent
-      countdown: true,        // true to show the shrinking border
-      maxStack: 5,            // Max toasts per position
-      lightMode: true,        // Toggle light/dark theme
-      useBS5Theme: true,     // If true, will check for 'data-bs-theme' on body and match it to bs primary
-      onClose: null,          // Callback fn
+      type: "default",
+      position: "top-right",
+      duration: 3000,
+      countdown: true,
+      maxStack: 5,
+      lightMode: true,
+      onClose: null,
       ...options
     };
-    
+
+    this.remaining = this.options.duration;
+    this.startTime = null;
+    this.timer = null;
+
     this.#init();
   }
 
-  /**
-   * STATIC METHOD: Allows calling cbToast.show({...}) 
-   * instead of using the 'new' keyword.
-   */
   static show(options) {
     return new cbToast(options);
   }
 
   #init() {
-    // Check for existing container or create a new one for this position
     let container = document.querySelector(`.cb-toast-container.${this.options.position}`);
-    
     if (!container) {
       container = document.createElement('div');
       container.className = `cb-toast-container ${this.options.position}`;
       document.body.appendChild(container);
     }
-    
     this.container = container;
 
-    // --- MAX STACK LOGIC ---
-    // If we exceed the limit, remove the oldest toast in this container
     const existingToasts = this.container.querySelectorAll('.cb-toast');
     if (existingToasts.length >= this.options.maxStack) {
-        this.remove(existingToasts[0]); 
+      this.remove(existingToasts[0]);
     }
 
     this.#createToast();
@@ -64,27 +57,20 @@ export default class cbToast {
 
   #createToast() {
     const el = document.createElement('div');
-    
-    // Set the theme attribute for CSS targeting
     const theme = this.options.lightMode ? 'light' : 'dark';
     el.setAttribute('data-theme', theme);
-    
-    // Apply classes for type (e.g., cb-toast-success)
     el.className = `cb-toast cb-toast-${this.options.type}`;
-    
-    // Define the SVG Close Button once to keep it clean
+
     const closeBtnHtml = `
       <button class="cb-toast-close-btn" aria-label="Close">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="19" y1="5" x2="5" y2="19"></line>
           <line x1="5" y1="5" x2="19" y2="19"></line>
         </svg>
-      </button>
-    `;
+      </button>`;
 
     const showIcon = this.options.icon && toastIcons[this.options.type];
 
-    // Build HTML: If no title, put the close button INSIDE the body
     el.innerHTML = `
       ${this.options.title ? `
         <div class="cb-toast-header">
@@ -97,68 +83,80 @@ export default class cbToast {
       <div class="cb-toast-body">
         <div class="cb-toast-content">${this.options.message}</div>
         ${!this.options.title ? closeBtnHtml : ''}
-      </div>
-    `;
+      </div>`;
 
-    // Add to DOM
     this.container.appendChild(el);
-    
-    const canShowCountdown = this.options.countdown && this.options.duration > 0;
 
-    // Trigger Entrance and Countdown
+    const body = el.querySelector('.cb-toast-body');
+
+    const startTimer = () => {
+      if (this.options.duration > 0) {
+        this.startTime = Date.now();
+        this.timer = setTimeout(() => this.remove(el), this.remaining);
+        
+        if (this.options.countdown) {
+          // Set duration for the transition to finish
+          body.style.setProperty('--duration', `${this.remaining}ms`);
+          el.classList.add('shrinking');
+        }
+      }
+    };
+
+    const pauseTimer = () => {
+      clearTimeout(this.timer);
+      const elapsed = Date.now() - this.startTime;
+      
+      // Calculate where the bar is currently (0 to 1)
+      const currentProgress = (this.remaining - elapsed) / this.options.duration;
+      body.style.setProperty('--progress', currentProgress);
+      
+      this.remaining -= elapsed;
+      el.classList.remove('shrinking');
+    };
+
+    el.addEventListener('mouseenter', pauseTimer);
+    el.addEventListener('mouseleave', () => {
+      if (this.remaining > 0) startTimer();
+    });
+
     setTimeout(() => {
       el.classList.add('show');
-      
-      if (canShowCountdown) {
-        const body = el.querySelector('.cb-toast-body');
-        // We pass the duration to CSS via a Variable so the ::after element can see it
-        body.style.setProperty('--duration', `${this.options.duration}ms`);
-        el.classList.add('shrinking');
-      }
+      startTimer();
     }, 10);
 
-    // AUTO-HIDE LOGIC
-    if (this.options.duration > 0) {
-      this.timer = setTimeout(() => this.remove(el), this.options.duration);
-    }
-
-    // MANUAL CLOSE LOGIC
     const closeBtn = el.querySelector('.cb-toast-close-btn');
     closeBtn.onclick = () => {
-      if (this.timer) clearTimeout(this.timer);
+      clearTimeout(this.timer);
       this.remove(el);
     };
   }
 
-  /**
-   * Removes the toast with an exit animation
-   * @param {HTMLElement} el - The toast element to remove
-   */
   remove(el) {
-    if (!el || el.dataset.removing) return; 
-    el.dataset.removing = "true"; // Prevent double-triggering
+    if (!el || el.dataset.removing) return;
+    el.dataset.removing = "true";
+
+    // --- NEW: Freeze the bar during exit ---
+    const body = el.querySelector('.cb-toast-body');
+    if (body && this.startTime) {
+      const elapsed = Date.now() - this.startTime;
+      const finalProgress = Math.max(0, (this.remaining - elapsed) / this.options.duration);
+      body.style.setProperty('--progress', finalProgress);
+    }
+    // ---------------------------------------
 
     el.classList.remove('show');
-    el.classList.remove('shrinking');
+    el.classList.remove('shrinking'); // Transition stops, jumps to --progress
 
-    // Trigger the callback if it exists
     if (typeof this.options.onClose === 'function') {
       this.options.onClose();
     }
 
-    // Fallback: If the transition fails to fire (e.g. reduced motion), delete after 400ms
-    const fallback = setTimeout(() => {
-        if (el.parentNode) el.remove();
-    }, 400);
+    const fallback = setTimeout(() => { if (el.parentNode) el.remove(); }, 400);
 
-    // Wait for the opacity/transform transition to finish before deleting from DOM
     el.addEventListener('transitionend', (e) => {
-      // Ensure we are reacting to the main toast transition, not the inner bar
       if (e.target === el) {
         clearTimeout(fallback);
         el.remove();
-        
-        // Cleanup the container if it's now empty
         if (this.container && this.container.childNodes.length === 0) {
           this.container.remove();
         }

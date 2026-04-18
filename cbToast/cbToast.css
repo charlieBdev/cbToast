@@ -31,7 +31,7 @@
     2. THE TOAST COMPONENT
 ========================================================================== */
 .cb-toast {
-    /* Bootstrap 5.3 Dark Palette */
+    /* Bootstrap 5.3 Dark Palette Defaults */
     --toast-bg: #212529;          
     --toast-color: #dee2e6;       
     --toast-border-rgba: rgba(255, 255, 255, 0.15);
@@ -101,7 +101,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: inherit; /* Icons now stay neutral/monochrome */
+    color: inherit;
 }
 
 .cb-toast-icon svg {
@@ -123,9 +123,11 @@
     padding-top: 10px;
     border-top: 1px solid var(--toast-border-rgba);
     position: relative;
+    
+    /* Flex handles "No Title" layout: Close button moves to body and stays centered */
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; 
+    align-items: center; 
     gap: 12px;
 }
 
@@ -133,7 +135,9 @@
     flex: 1;
 }
 
-/* The Progress Bar Runner */
+/* ==========================================================================
+    4. PROGRESS BAR (The Runner)
+========================================================================== */
 .cb-toast-body::after {
     content: '';
     position: absolute;
@@ -142,17 +146,25 @@
     height: 2px;
     width: 100%; 
     z-index: 1;
-    transition: width var(--duration, 0ms) linear;
-    background-color: transparent; 
+    
+    transform-origin: left;
+    /* Uses --progress (0 to 1) for the "Paused" state and frozen exit state */
+    transform: scaleX(var(--progress, 1));
+    
+    /* Default: No transition so it snaps to --progress when class 'shrinking' is removed */
+    transition: none; 
     pointer-events: none;
+    background-color: transparent; 
 }
 
+/* Only transition when shrinking class is present */
 .cb-toast.shrinking .cb-toast-body::after {
-    width: 0% !important;
+    transform: scaleX(0);
+    transition: transform var(--duration, 0ms) linear;
 }
 
 /* ==========================================================================
-    4. CLOSE BUTTON
+    5. CLOSE BUTTON
 ========================================================================== */
 .cb-toast-close-btn {
     background: none;
@@ -167,7 +179,7 @@
     height: 24px;
     color: inherit;
     opacity: var(--close-opacity);
-    transition: opacity 0.2s ease, transform 0.3s ease; /* Restored transform transition */
+    transition: opacity 0.2s ease, transform 0.3s ease;
     flex-shrink: 0; 
 }
 
@@ -179,20 +191,20 @@
 
 .cb-toast-close-btn:hover {
     opacity: 1;
-    transform: rotate(90deg); /* Restored the spin */
+    transform: rotate(90deg);
 }
 
 /* ==========================================================================
-    5. COLOR THEMES (Progress Bars Only)
+    6. COLOR THEMES (Progress Bar Colors)
 ========================================================================== */
-/* Default */
+/* Default (Secondary) */
 .cb-toast-default[data-theme="dark"] .cb-toast-body::after { background-color: #6c757d; }
 .cb-toast-default[data-theme="light"] .cb-toast-body::after { background-color: #adb5bd; }
 
 /* Success */
 .cb-toast-success .cb-toast-body::after { background-color: #198754; }
 
-/* Error */
+/* Error (Danger) */
 .cb-toast-error .cb-toast-body::after { background-color: #dc3545; }
 
 /* Warning */
