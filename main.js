@@ -101,8 +101,6 @@ document.getElementById('lightModeBtn').addEventListener('click', () => {
     // Trigger the toast
     new cbToast({
         ...currentOptions, // Unpacks title, message, type, and position
-        duration: 3000,
-        countdown: true,
         lightMode: true,   // Force light mode for this button
     });
 

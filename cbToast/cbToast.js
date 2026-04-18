@@ -7,15 +7,16 @@ export default class cbToast {
   constructor(options = {}) {
     // 1. DEFAULT SETTINGS
     this.options = {
-      title: "Notification",
-      message: "Default message",
-      type: "default",      // default, info, success, error, warning
-      position: "center",   // top-left, top-right, bottom-left, bottom-right, center
-      duration: 0,          // 0 = persistent
-      countdown: false,     // true to show the shrinking border
-      maxStack: 5,          // Max toasts per position
-      lightMode: false,     // Toggle light/dark theme
-      onClose: null,
+      title: 'Notification',
+      message: 'Message',
+      type: "default",        // default, info, success, error, warning
+      position: "center",     // top-left, top-right, bottom-left, bottom-right, center
+      duration: 3000,         // 0 = persistent
+      countdown: true,        // true to show the shrinking border
+      maxStack: 5,            // Max toasts per position
+      useBS5Theme: false,     // If true, will check for 'data-bs-theme' on body and match it to bs primary
+      lightMode: false,       // Toggle light/dark theme
+      onClose: null,          // Callback fn
       ...options
     };
     
@@ -62,17 +63,26 @@ export default class cbToast {
     // Apply classes for type (e.g., cb-toast-success)
     el.className = `cb-toast cb-toast-${this.options.type}`;
     
+    // Define the SVG Close Button once to keep it clean
+    const closeBtnHtml = `
+      <button class="cb-toast-close-btn" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>`;
+
+    // Build HTML: If no title, put the close button INSIDE the body
     el.innerHTML = `
-      <div class="cb-toast-header">
-        <strong class="cb-toast-title">${this.options.title}</strong>
-        <button class="cb-toast-close-btn" aria-label="Close">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
+      ${this.options.title ? `
+        <div class="cb-toast-header">
+          <strong class="cb-toast-title">${this.options.title}</strong>
+          ${closeBtnHtml}
+        </div>` : ''}
+      <div class="cb-toast-body">
+        <div class="cb-toast-content">${this.options.message}</div>
+        ${!this.options.title ? closeBtnHtml : ''}
       </div>
-      <div class="cb-toast-body">${this.options.message}</div>
     `;
 
     // Add to DOM
@@ -85,9 +95,9 @@ export default class cbToast {
       el.classList.add('show');
       
       if (canShowCountdown) {
-        const header = el.querySelector('.cb-toast-header');
+        const body = el.querySelector('.cb-toast-body');
         // We pass the duration to CSS via a Variable so the ::after element can see it
-        header.style.setProperty('--duration', `${this.options.duration}ms`);
+        body.style.setProperty('--duration', `${this.options.duration}ms`);
         el.classList.add('shrinking');
       }
     }, 10);

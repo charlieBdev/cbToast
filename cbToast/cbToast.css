@@ -18,7 +18,7 @@
 .cb-toast-container.bottom-right { bottom: 0; right: 0; align-items: flex-end; flex-direction: column-reverse; }
 .cb-toast-container.bottom-left  { bottom: 0; left: 0; align-items: flex-start; flex-direction: column-reverse; }
 
-/* Dead Center Layout */
+/* Center Layout */
 .cb-toast-container.center {
     top: 50%;
     left: 50%;
@@ -28,10 +28,10 @@
 }
 
 /* ==========================================================================
-    2. THE TOAST COMPONENT (Bootstrap 5.3 Theme Alignment)
+    2. THE TOAST COMPONENT
 ========================================================================== */
 .cb-toast {
-    /* Dark Mode: Elevated Surface (#343a40) to pop against body (#212529) */
+    /* Dark Mode Defaults */
     --toast-bg: #343a40;          
     --toast-color: #f8f9fa;       
     --toast-border-rgba: rgba(255, 255, 255, 0.15);
@@ -52,7 +52,7 @@
     overflow: hidden;
     border: 1px solid var(--toast-border-rgba);
 
-    /* Animation: Initial State */
+    /* Animation State */
     opacity: 0;
     transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28), 
                 opacity 0.3s ease;
@@ -67,53 +67,27 @@
     --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
-/* --- Entrance Animations --- */
+/* Entrance Animations */
 .cb-toast-container.top-right .cb-toast,
 .cb-toast-container.bottom-right .cb-toast { transform: translateX(110%); }
-
 .cb-toast-container.top-left .cb-toast,
 .cb-toast-container.bottom-left .cb-toast { transform: translateX(-110%); }
-
 .cb-toast-container.center .cb-toast { transform: scale(0.8); }
 
-/* Show State */
 .cb-toast.show {
     opacity: 1;
     transform: translate(0, 0) scale(1) !important;
 }
 
 /* ==========================================================================
-    3. HEADER & COUNTDOWN BAR
+    3. HEADER & BODY STRUCTURE
 ========================================================================== */
 .cb-toast-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* 1. Change border to 3px to match the bar height exactly */
-    border-bottom: 3px solid var(--toast-border-rgba);
     padding-bottom: 8px;
-    margin-bottom: 10px;
     position: relative;
-}
-
-.cb-toast-header::after {
-    content: '';
-    position: absolute;
-    /* 2. Position at -3px to sit exactly on top of the 3px border */
-    bottom: -3px; 
-    left: 0;
-    /* 3. Match height exactly to the border-bottom */
-    height: 3px;
-    width: 100%; 
-    z-index: 1;
-    transition: width var(--duration, 0ms) linear;
-    background-color: transparent; 
-    pointer-events: none;
-}
-
-/* Shrink trigger */
-.cb-toast.shrinking .cb-toast-header::after {
-    width: 0% !important;
 }
 
 .cb-toast-title { 
@@ -128,31 +102,63 @@
     line-height: 1.4; 
     opacity: 0.9;
     color: var(--toast-color); 
+    padding-top: 12px;
+    /* Static 3px line track */
+    border-top: 3px solid var(--toast-border-rgba);
+    position: relative;
+    
+    /* Layout to handle Close Button alignment */
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Vertically aligns X with the text */
+    gap: 12px;
+}
+
+.cb-toast-content {
+    flex: 1; /* Pushes the Close Button to the far right */
+}
+
+/* The "Runner" (Shrinking Bar) */
+.cb-toast-body::after {
+    content: '';
+    position: absolute;
+    top: -3px; /* Sits perfectly on the 3px border-top */
+    left: 0;
+    height: 3px;
+    width: 100%; 
+    z-index: 1;
+    transition: width var(--duration, 0ms) linear;
+    background-color: transparent; 
+    pointer-events: none;
+}
+
+.cb-toast.shrinking .cb-toast-body::after {
+    width: 0% !important;
 }
 
 /* ==========================================================================
-    4. CLOSE BUTTON (SVG Optimized)
+    4. CLOSE BUTTON (SVG)
 ========================================================================== */
 .cb-toast-close-btn {
     background: none;
     border: none;
     padding: 0;
-    margin: 0 0 0 10px;
+    margin: 0;
     cursor: pointer;
-    
     display: flex;
     align-items: center;
     justify-content: center;
-    
     width: 24px;
     height: 24px;
-    color: inherit; /* Ensures SVG stroke uses the theme color */
-    
+    color: inherit;
     opacity: var(--close-opacity);
     transition: opacity 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0; /* Prevents button from being squished */
+    
+    /* Fine-tune visual vertical alignment */
+    transform: translateY(1px); 
 }
 
-/* SVG specific sizing */
 .cb-toast-close-btn svg {
     width: 14px;
     height: 14px;
@@ -161,25 +167,16 @@
 
 .cb-toast-close-btn:hover {
     opacity: 1;
-    transform: rotate(90deg);
+    transform: translateY(1px) rotate(90deg); /* Maintains the nudge while rotating */
 }
 
 /* ==========================================================================
     5. COLOR THEMES (Progress Bars)
 ========================================================================== */
+.cb-toast-default[data-theme="dark"] .cb-toast-body::after { background-color: rgba(255,255,255,0.5); }
+.cb-toast-default[data-theme="light"] .cb-toast-body::after { background-color: rgba(0,0,0,0.2); }
 
-/* Default Bar */
-.cb-toast-default[data-theme="dark"] .cb-toast-header::after { background-color: rgba(255,255,255,0.5); }
-.cb-toast-default[data-theme="light"] .cb-toast-header::after { background-color: rgba(0,0,0,0.2); }
-
-/* Status Bars (Bootstrap-aligned Primary Colors) */
-.cb-toast-success .cb-toast-header::after { background-color: #198754; }
-.cb-toast-error   .cb-toast-header::after { background-color: #dc3545; }
-.cb-toast-warning .cb-toast-header::after { background-color: #ffc107; }
-.cb-toast-info    .cb-toast-header::after { background-color: #0dcaf0; }
-
-/* Contrast overrides for high-contrast status bars */
-/* .cb-toast-info, .cb-toast-warning { */
-    /* If your status toasts use very bright bars, you can force dark text here */
-    /* --toast-color: #212529; */
-/* } */
+.cb-toast-success .cb-toast-body::after { background-color: #198754; }
+.cb-toast-error   .cb-toast-body::after { background-color: #dc3545; }
+.cb-toast-warning .cb-toast-body::after { background-color: #ffc107; }
+.cb-toast-info    .cb-toast-body::after { background-color: #0dcaf0; }

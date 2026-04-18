@@ -46,27 +46,6 @@ h1 {
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.window-header {
-    background: #252526;
-    padding: 12px 15px;
-    display: flex;
-    align-items: center;
-}
-
-.action-btns { display: flex; gap: 8px; }
-.action-btns span { width: 12px; height: 12px; border-radius: 50%; }
-.action-btns span:nth-child(1) { background: #ff5f56; }
-.action-btns span:nth-child(2) { background: #ffbd2e; }
-.action-btns span:nth-child(3) { background: #27c93f; }
-
-.window-title {
-    flex-grow: 1;
-    text-align: center;
-    color: #858585;
-    font-size: 0.75rem;
-    margin-right: 40px; /* Balances the dots */
-}
-
 .code-window pre {
     margin: 0;
     padding: 20px;
@@ -80,12 +59,13 @@ h1 {
     line-height: 1.6;
 }
 
-/* Syntax Highlighting */
-.keyword { color: #569cd6; } 
-.string  { color: #ce9178; } 
-.number  { color: #b5cea8; } 
-.console { color: #4ec9b0; } 
-.method  { color: #dcdcaa; }
+/* Syntax Highlighting for the Code Window */
+.keyword { color: #569cd6; } /* Blue (new, true, false) */
+.string  { color: #ce9178; } /* Orange/Peach ('Success') */
+.number  { color: #b5cea8; } /* Light Green (3000, 5) */
+.console { color: #4ec9b0; } /* Teal (console) */
+.method  { color: #dcdcaa; } /* Yellow (cbToast, .log) */
+.comment { color: #6a9955; font-style: italic; } /* Muted Green (Comments) */
 
 /* ==========================================================================
   BUTTON GRID
