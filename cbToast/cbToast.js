@@ -23,8 +23,8 @@ export default class cbToast {
       duration: 3000,         // 0 = persistent
       countdown: true,        // true to show the shrinking border
       maxStack: 5,            // Max toasts per position
-      useBS5Theme: false,     // If true, will check for 'data-bs-theme' on body and match it to bs primary
-      lightMode: false,       // Toggle light/dark theme
+      lightMode: true,        // Toggle light/dark theme
+      useBS5Theme: true,     // If true, will check for 'data-bs-theme' on body and match it to bs primary
       onClose: null,          // Callback fn
       ...options
     };
@@ -76,10 +76,11 @@ export default class cbToast {
     const closeBtnHtml = `
       <button class="cb-toast-close-btn" aria-label="Close">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
+          <line x1="19" y1="5" x2="5" y2="19"></line>
+          <line x1="5" y1="5" x2="19" y2="19"></line>
         </svg>
-      </button>`;
+      </button>
+    `;
 
     const showIcon = this.options.icon && toastIcons[this.options.type];
 
