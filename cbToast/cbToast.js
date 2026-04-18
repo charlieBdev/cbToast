@@ -18,11 +18,13 @@ export default class cbToast {
       icon: true,
       message: 'Message',
       type: "default",
-      position: "top-right",
+      position: "center",
       duration: 3000,
       countdown: true,
       maxStack: 5,
       lightMode: true,
+      useBS5Theme: false,
+      pauseOnHover: true,
       onClose: null,
       ...options
     };
@@ -47,19 +49,38 @@ export default class cbToast {
     }
     this.container = container;
 
-    const existingToasts = this.container.querySelectorAll('.cb-toast');
-    if (existingToasts.length >= this.options.maxStack) {
-      this.remove(existingToasts[0]);
+    // --- UPDATED LOGIC ---
+    // Only select toasts that do NOT have the 'removing' dataset attribute
+    const activeToasts = Array.from(this.container.querySelectorAll('.cb-toast'))
+                              .filter(t => !t.dataset.removing);
+
+    if (activeToasts.length >= this.options.maxStack) {
+      // Force remove the oldest active toast
+      this.remove(activeToasts[0]);
     }
+    // ---------------------
 
     this.#createToast();
   }
 
   #createToast() {
     const el = document.createElement('div');
-    const theme = this.options.lightMode ? 'light' : 'dark';
+    
+    // 1. Theme & BS5 Logic
+    let theme = this.options.lightMode ? 'light' : 'dark';
+    
+    if (this.options.useBS5Theme) {
+      // Add the hook class for CSS scoping
+      el.classList.add('cb-toast-bs5');
+      
+      // Auto-detect BS5 theme from <html> or <body>
+      const bsTheme = document.documentElement.getAttribute('data-bs-theme') || 
+                      document.body.getAttribute('data-bs-theme');
+      if (bsTheme) theme = bsTheme;
+    }
+
     el.setAttribute('data-theme', theme);
-    el.className = `cb-toast cb-toast-${this.options.type}`;
+    el.className += ` cb-toast cb-toast-${this.options.type}`;
 
     const closeBtnHtml = `
       <button class="cb-toast-close-btn" aria-label="Close">
@@ -103,6 +124,8 @@ export default class cbToast {
     };
 
     const pauseTimer = () => {
+      if (!this.options.pauseOnHover) return;
+
       clearTimeout(this.timer);
       const elapsed = Date.now() - this.startTime;
       
@@ -116,7 +139,9 @@ export default class cbToast {
 
     el.addEventListener('mouseenter', pauseTimer);
     el.addEventListener('mouseleave', () => {
-      if (this.remaining > 0) startTimer();
+      if (this.options.pauseOnHover && this.remaining > 0) {
+        startTimer();
+      }
     });
 
     setTimeout(() => {

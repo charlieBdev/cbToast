@@ -103,3 +103,6 @@ main button:hover {
 #errorBtn     { background-color: #dc3545; }
 #infoBtn      { background-color: #0dcaf0; color: #212529; }
 #warningBtn   { background-color: #ffc107; color: #212529; }
+#bs5Btn       { background-color: #0d6efd; color: #fff; }    /* Bootstrap Primary Blue */
+#noIconBtn    { background-color: #6c757d; color: #fff; }    /* Bootstrap Secondary Grey */
+#stackBtn      { background-color: #6610f2; color: #fff; }    /* Bootstrap Indigo (High Energy) */

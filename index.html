@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>cbToast Demo</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  
   <link rel="stylesheet" href="./cbToast/cbToast.css">
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -16,6 +19,7 @@
       <div class="code-window">
         <pre><code><span class="keyword">new</span> <span class="method">cbToast</span>({
   title: <span class="string">'Success'</span>,
+  icon: <span class="keyword">true</span>,
   message: <span class="string">'Item Saved!'</span>,
   type: <span class="string">'success'</span>, <span class="comment">// default, info, error, warning</span>
   position: <span class="string">'top-right'</span>, <span class="comment">// top-left, bottom-left, bottom-right, center</span>
@@ -24,18 +28,22 @@
   maxStack: <span class="number">5</span>,
   lightMode: <span class="keyword">false</span>,
   useBS5Theme: <span class="keyword">false</span>, <span class="comment">// overrides lightMode, uses data-bs-theme</span>
+  pauseOnHover: <span class="keyword">true</span>,
   onClose: () => <span class="console">console</span>.<span class="method">log</span>(<span class="string">'Closed!'</span>)
 });</code></pre>
       </div>
     </section>
 
     <section id="btn-container">
-      <button id="defaultBtn">Default Toast</button>
-      <button id="infoBtn">Info Toast</button>
-      <button id="successBtn">Success Toast</button>
-      <button id="warningBtn">Warning Toast</button>
-      <button id="errorBtn">Error Toast</button>
-      <button id="lightModeBtn">Light Mode Toast</button>
+      <button id="defaultBtn">Default</button>
+      <button id="infoBtn">Info</button>
+      <button id="successBtn">Success</button>
+      <button id="warningBtn">Warning</button>
+      <button id="errorBtn">Error</button>
+      <button id="lightModeBtn">Light Mode</button>
+      <button id="bs5Btn">BS5</button>
+      <button id="noIconBtn">No Icon</button>
+      <button id="stackBtn">Stack 2</button>
     </section>
   </main>
 

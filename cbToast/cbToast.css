@@ -121,7 +121,7 @@
     line-height: 1.5; 
     color: var(--toast-color); 
     padding-top: 10px;
-    border-top: 1px solid var(--toast-border-rgba);
+    border-top: 3px solid var(--toast-border-rgba);
     position: relative;
     
     /* Flex handles "No Title" layout: Close button moves to body and stays centered */
@@ -141,9 +141,9 @@
 .cb-toast-body::after {
     content: '';
     position: absolute;
-    top: -1px; 
+    top: -3px; /* Alignment fix: sits exactly on the 3px border */
     left: 0;
-    height: 2px;
+    height: 3px; /* Alignment fix: matches border thickness */
     width: 100%; 
     z-index: 1;
     
@@ -197,18 +197,28 @@
 /* ==========================================================================
     6. COLOR THEMES (Progress Bar Colors)
 ========================================================================== */
-/* Default (Secondary) */
-.cb-toast-default[data-theme="dark"] .cb-toast-body::after { background-color: #6c757d; }
-.cb-toast-default[data-theme="light"] .cb-toast-body::after { background-color: #adb5bd; }
 
-/* Success */
+/* --- Default Case (Not using BS5) --- */
+.cb-toast-default .cb-toast-body::after { background-color: #6c757d; }
 .cb-toast-success .cb-toast-body::after { background-color: #198754; }
-
-/* Error (Danger) */
-.cb-toast-error .cb-toast-body::after { background-color: #dc3545; }
-
-/* Warning */
+.cb-toast-error   .cb-toast-body::after { background-color: #dc3545; }
 .cb-toast-warning .cb-toast-body::after { background-color: #ffc107; }
+.cb-toast-info    .cb-toast-body::after { background-color: #0dcaf0; }
 
-/* Info */
-.cb-toast-info .cb-toast-body::after { background-color: #0dcaf0; }
+/* --- BS5 Specific Case (Overrides) --- */
+/* Only triggers if useBS5Theme: true was passed in JS */
+.cb-toast-bs5.cb-toast-default .cb-toast-body::after { 
+    background-color: var(--bs-primary, #6c757d); 
+}
+.cb-toast-bs5.cb-toast-success .cb-toast-body::after { 
+    background-color: var(--bs-success, #198754); 
+}
+.cb-toast-bs5.cb-toast-error .cb-toast-body::after { 
+    background-color: var(--bs-danger, #dc3545); 
+}
+.cb-toast-bs5.cb-toast-warning .cb-toast-body::after { 
+    background-color: var(--bs-warning, #ffc107); 
+}
+.cb-toast-bs5.cb-toast-info .cb-toast-body::after { 
+    background-color: var(--bs-info, #0dcaf0); 
+}
