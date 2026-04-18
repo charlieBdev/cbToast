@@ -1,5 +1,45 @@
 import cbToast from './cbToast/cbToast.js';
 
+document.getElementById('runCodeBtn').addEventListener('click', () => {
+    const codeElement = document.getElementById('editableCode');
+    
+    // 1. Get the raw text (ignoring the span tags)
+    let rawText = codeElement.innerText;
+
+    try {
+        /* 2. Extract just the object between ({ and })
+           We look for the first '{' and the last '}'
+        */
+        const startIdx = rawText.indexOf('{');
+        const endIdx = rawText.lastIndexOf('}');
+        
+        if (startIdx === -1 || endIdx === -1) {
+            throw new Error("Could not find a valid config object.");
+        }
+
+        const jsonString = rawText.substring(startIdx, endIdx + 1);
+
+        /* 3. Convert string to Object. 
+           Using 'new Function' is safer/cleaner than eval() for this.
+        */
+        const config = new Function(`return ${jsonString}`)();
+
+        // 4. Fire the toast!
+        cbToast.show(config);
+
+    } catch (err) {
+        // 5. Show error toast if the user messed up the syntax
+        cbToast.show({
+            title: 'Syntax Error',
+            message: `Failed to parse config: ${err.message}`,
+            type: 'error',
+            position: "top-right",
+            duration: 0
+        });
+        console.error("Toast Parsing Error:", err);
+    }
+});
+
 /* ==========================================================================
     1. STANDARD TOAST TRIGGERS
 ========================================================================== */

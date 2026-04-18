@@ -68,7 +68,7 @@ h1 {
 .comment { color: #6a9955; font-style: italic; } /* Muted Green (Comments) */
 
 /* ==========================================================================
-  BUTTON GRID
+   BUTTON GRID & VARIANTS
 ========================================================================== */
 #btn-container {
     display: grid;
@@ -77,7 +77,8 @@ h1 {
     width: 100%;
 }
 
-main button {
+/* Base style for all action buttons */
+#btn-container button {
     padding: 14px 20px;
     font-size: 0.9rem;
     font-weight: 600;
@@ -85,24 +86,105 @@ main button {
     border-radius: 10px;
     border: none;
     color: white;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    -webkit-tap-highlight-color: transparent; 
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-main button:hover {
+#btn-container button:hover {
+    transform: translateY(-3px);
     filter: brightness(1.1);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* Color Variants */
+#btn-container button:active {
+    transform: translateY(-1px);
+}
+
+/* Specific Color Variants */
 #defaultBtn   { background-color: #212529; }
 #lightModeBtn { background-color: #adb5bd; color: #212529; }
-#successBtn   { background-color: #198754; }
-#errorBtn     { background-color: #dc3545; }
-#infoBtn      { background-color: #0dcaf0; color: #212529; }
-#warningBtn   { background-color: #ffc107; color: #212529; }
-#bs5Btn       { background-color: #0d6efd; color: #fff; }    /* Bootstrap Primary Blue */
-#noIconBtn    { background-color: #6c757d; color: #fff; }    /* Bootstrap Secondary Grey */
-#stackBtn      { background-color: #6610f2; color: #fff; }    /* Bootstrap Indigo (High Energy) */
+#successBtn   { background-color: #198754; box-shadow: 0 4px 12px rgba(25, 135, 84, 0.2); }
+#errorBtn     { background-color: #dc3545; box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2); }
+#infoBtn      { background-color: #0dcaf0; color: #212529; box-shadow: 0 4px 12px rgba(13, 202, 240, 0.2); }
+#warningBtn   { background-color: #ffc107; color: #212529; box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2); }
+#bs5Btn       { background-color: #0d6efd; box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2); }
+#noIconBtn    { background-color: #6c757d; }
+#stackBtn     { background-color: #6610f2; box-shadow: 0 4px 12px rgba(102, 16, 242, 0.2); }
+
+/* ==========================================================================
+   EDITABLE CODE & RUN BUTTON
+========================================================================== */
+
+/* Make the code block feel like a real editor */
+#editableCode {
+    outline: none;
+    display: block;
+    caret-color: #569cd6; /* Matches keyword color */
+    white-space: pre;
+}
+
+/* ==========================================================================
+   GRADIENT RUN BUTTON
+========================================================================== */
+#runCodeBtn {
+    margin-top: 15px;
+    width: 100%;
+    
+    /* 1. Nice Gradient Background (BS5 Blue -> BS5 Indigo) */
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    
+    color: white;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    
+    /* 2. Transition for smooth effects */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    /* 3. Deep Indigo 'Glow' Box Shadow */
+    box-shadow: 0 4px 15px rgba(102, 16, 242, 0.3);
+    
+    position: relative;
+    overflow: hidden;
+}
+
+#runCodeBtn:hover {
+    /* 4. Intensify the gradient slightly on hover */
+    background: linear-gradient(135deg, #0b5ed7, #520dc2);
+    
+    /* 5. Elevate and glow stronger */
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(102, 16, 242, 0.5);
+}
+
+#runCodeBtn:active {
+    /* 6. Push down to feel like a real click */
+    transform: translateY(-1px) scale(1);
+    box-shadow: 0 4px 10px rgba(102, 16, 242, 0.3);
+}
+
+/* 7. Subtle 'Reflection' shimmer effect on hover */
+#runCodeBtn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+#runCodeBtn:hover::before {
+    opacity: 1;
+}
