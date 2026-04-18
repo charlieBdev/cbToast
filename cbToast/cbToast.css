@@ -12,14 +12,14 @@
     padding: 20px;
 }
 
-/* Corner Anchors */
-.cb-toast-container.top-right    { top: 0; right: 0; align-items: flex-end; }
-.cb-toast-container.top-left     { top: 0; left: 0; align-items: flex-start; }
-.cb-toast-container.bottom-right { bottom: 0; right: 0; align-items: flex-end; flex-direction: column-reverse; }
-.cb-toast-container.bottom-left  { bottom: 0; left: 0; align-items: flex-start; flex-direction: column-reverse; }
+/* Unique Corner Anchors - Prevents collisions with compiled Bootstrap */
+.cb-toast-container.cb-toast-top-right    { top: 0; right: 0; align-items: flex-end; }
+.cb-toast-container.cb-toast-top-left     { top: 0; left: 0; align-items: flex-start; }
+.cb-toast-container.cb-toast-bottom-right { bottom: 0; right: 0; align-items: flex-end; flex-direction: column-reverse; }
+.cb-toast-container.cb-toast-bottom-left  { bottom: 0; left: 0; align-items: flex-start; flex-direction: column-reverse; }
 
-/* Center Layout */
-.cb-toast-container.center {
+/* Unique Center Layout */
+.cb-toast-container.cb-toast-center {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -50,8 +50,7 @@
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
-    border: 1px solid var(--toast-border-rgba);
-
+    
     /* Animation State */
     opacity: 0;
     transition: transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28), 
@@ -67,14 +66,15 @@
     --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
-/* Entrance Animations */
-.cb-toast-container.top-right .cb-toast,
-.cb-toast-container.bottom-right .cb-toast { transform: translateX(110%); }
-.cb-toast-container.top-left .cb-toast,
-.cb-toast-container.bottom-left .cb-toast { transform: translateX(-110%); }
-.cb-toast-container.center .cb-toast { transform: scale(0.8); }
+/* Entrance Animations linked to unique position classes */
+.cb-toast-container.cb-toast-top-right .cb-toast,
+.cb-toast-container.cb-toast-bottom-right .cb-toast { transform: translateX(110%); }
+.cb-toast-container.cb-toast-top-left .cb-toast,
+.cb-toast-container.cb-toast-bottom-left .cb-toast { transform: translateX(-110%); }
+.cb-toast-container.cb-toast-center .cb-toast { transform: scale(0.8); }
 
-.cb-toast.show {
+/* Unique 'show' class to avoid Bootstrap conflicts */
+.cb-toast.cb-show {
     opacity: 1;
     transform: translate(0, 0) scale(1) !important;
 }
@@ -123,8 +123,6 @@
     padding-top: 10px;
     border-top: 3px solid var(--toast-border-rgba);
     position: relative;
-    
-    /* Flex handles "No Title" layout: Close button moves to body and stays centered */
     display: flex;
     justify-content: space-between;
     align-items: center; 
@@ -141,24 +139,20 @@
 .cb-toast-body::after {
     content: '';
     position: absolute;
-    top: -3px; /* Alignment fix: sits exactly on the 3px border */
+    top: -3px; 
     left: 0;
-    height: 3px; /* Alignment fix: matches border thickness */
+    height: 3px; 
     width: 100%; 
     z-index: 1;
-    
     transform-origin: left;
-    /* Uses --progress (0 to 1) for the "Paused" state and frozen exit state */
     transform: scaleX(var(--progress, 1));
-    
-    /* Default: No transition so it snaps to --progress when class 'shrinking' is removed */
     transition: none; 
     pointer-events: none;
     background-color: transparent; 
 }
 
-/* Only transition when shrinking class is present */
-.cb-toast.shrinking .cb-toast-body::after {
+/* Unique state class for progress animation */
+.cb-toast.cb-shrinking .cb-toast-body::after {
     transform: scaleX(0);
     transition: transform var(--duration, 0ms) linear;
 }
@@ -183,42 +177,32 @@
     flex-shrink: 0; 
 }
 
-.cb-toast-close-btn svg {
-    width: 14px;
-    height: 14px;
-    display: block;
-}
-
 .cb-toast-close-btn:hover {
     opacity: 1;
     transform: rotate(90deg);
 }
 
 /* ==========================================================================
-    6. COLOR THEMES (Progress Bar Colors)
+    6. COLOR THEMES & BORDERS
 ========================================================================== */
 
-/* --- Default Case (Not using BS5) --- */
+/* Coloured borders (fixes invisible borders in compiled BS projects) */
+.cb-toast-info    { border-color: #0dcaf0 !important; }
+.cb-toast-success { border-color: #198754 !important; }
+.cb-toast-warning { border-color: #ffc107 !important; }
+.cb-toast-error   { border-color: #dc3545 !important; }
+.cb-toast-default { border-color: #6c757d !important; }
+
+/* Progress Bar Colors - Default */
 .cb-toast-default .cb-toast-body::after { background-color: #6c757d; }
 .cb-toast-success .cb-toast-body::after { background-color: #198754; }
 .cb-toast-error   .cb-toast-body::after { background-color: #dc3545; }
 .cb-toast-warning .cb-toast-body::after { background-color: #ffc107; }
 .cb-toast-info    .cb-toast-body::after { background-color: #0dcaf0; }
 
-/* --- BS5 Specific Case (Overrides) --- */
-/* Only triggers if useBS5Theme: true was passed in JS */
-.cb-toast-bs5.cb-toast-default .cb-toast-body::after { 
-    background-color: var(--bs-primary, #6c757d); 
-}
-.cb-toast-bs5.cb-toast-success .cb-toast-body::after { 
-    background-color: var(--bs-success, #198754); 
-}
-.cb-toast-bs5.cb-toast-error .cb-toast-body::after { 
-    background-color: var(--bs-danger, #dc3545); 
-}
-.cb-toast-bs5.cb-toast-warning .cb-toast-body::after { 
-    background-color: var(--bs-warning, #ffc107); 
-}
-.cb-toast-bs5.cb-toast-info .cb-toast-body::after { 
-    background-color: var(--bs-info, #0dcaf0); 
-}
+/* Progress Bar Colors - BS5 Variable Overrides */
+.cb-toast-bs5.cb-toast-default .cb-toast-body::after { background-color: var(--bs-primary, #6c757d); }
+.cb-toast-bs5.cb-toast-success .cb-toast-body::after { background-color: var(--bs-success, #198754); }
+.cb-toast-bs5.cb-toast-error   .cb-toast-body::after { background-color: var(--bs-danger, #dc3545); }
+.cb-toast-bs5.cb-toast-warning .cb-toast-body::after { background-color: var(--bs-warning, #ffc107); }
+.cb-toast-bs5.cb-toast-info    .cb-toast-body::after { background-color: var(--bs-info, #0dcaf0); }
