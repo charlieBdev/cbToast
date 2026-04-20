@@ -22,7 +22,7 @@ export default class cbToast {
             duration: 3000,
             countdown: true,
             maxStack: 5,
-            lightMode: true,
+            lightMode: false,
             useBS5Theme: false,
             pauseOnHover: true,
             onClose: null,
@@ -99,16 +99,16 @@ export default class cbToast {
         el.innerHTML = `
         ${this.options.title ? `
             <div class="cb-toast-header">
-            <div class="cb-toast-title-wrapper">
-                ${showIcon ? `<span class="cb-toast-icon">${toastIcons[this.options.type]}</span>` : ''}
-                <strong class="cb-toast-title">${this.options.title}</strong>
-            </div>
-            ${closeBtnHtml}
+                <div class="cb-toast-title-wrapper">
+                    ${showIcon ? `<span class="cb-toast-icon">${toastIcons[this.options.type]}</span>` : ''}
+                    <strong class="cb-toast-title">${this.options.title}</strong>
+                </div>
+                ${closeBtnHtml}
             </div>` : ''}
-        <div class="cb-toast-body">
-            <div class="cb-toast-content">${this.options.message}</div>
-            ${!this.options.title ? closeBtnHtml : ''}
-        </div>`;
+            <div class="cb-toast-body">
+                <div class="cb-toast-content">${this.options.message}</div>
+                ${!this.options.title ? closeBtnHtml : ''}
+            </div>`;
 
         this.container.appendChild(el);
 
