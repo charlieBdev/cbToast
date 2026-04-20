@@ -16,20 +16,20 @@
     <h1>cbToast Demo</h1>
     <section id="demo-instructions">
       <div class="code-window">
-        <pre><code id="editableCode" contenteditable="true" spellcheck="false"><span class="keyword">new</span> <span class="method">cbToast</span>({
-          title: <span class="string">'Success'</span>,
-          icon: <span class="keyword">true</span>,
-          message: <span class="string">'Item Saved!'</span>,
-          type: <span class="string">'success'</span>, <span class="comment">// default, info, error, warning</span>
-          position: <span class="string">'top-right'</span>, <span class="comment">// top-left, bottom-left, bottom-right, center</span>
-          duration: <span class="number">3000</span>,  <span class="comment">// 0 = persistant</span>
-          countdown: <span class="keyword">true</span>,
-          maxStack: <span class="number">5</span>,
-          lightMode: <span class="keyword">false</span>,
-          useBS5Theme: <span class="keyword">false</span>, <span class="comment">// overrides lightMode, uses data-bs-theme</span>
-          pauseOnHover: <span class="keyword">true</span>,
-          onClose: () => <span class="console">console</span>.<span class="method">log</span>(<span class="string">'Closed!'</span>)
-        });</code></pre>
+        <pre><code id="editableCode" contenteditable="true" spellcheck="false"><span class="method">cbToast</span>({
+    title: <span class="string">'Success'</span>,
+    icon: <span class="keyword">true</span>,
+    message: <span class="string">'Item Saved!'</span>,
+    type: <span class="string">'success'</span>, <span class="comment">// default, info, error, warning</span>
+    position: <span class="string">'top-right'</span>, <span class="comment">// top-left, bottom-left, bottom-right, center</span>
+    duration: <span class="number">3000</span>,  <span class="comment">// 0 = persistant</span>
+    countdown: <span class="keyword">true</span>,
+    maxStack: <span class="number">5</span>,
+    lightMode: <span class="keyword">false</span>,
+    useBS5Theme: <span class="keyword">false</span>, <span class="comment">// overrides lightMode, uses data-bs-theme</span>
+    pauseOnHover: <span class="keyword">true</span>,
+    onClose: () => <span class="console">console</span>.<span class="method">log</span>(<span class="string">'Closed!'</span>)
+});</code></pre>
       </div>
     </section>
     <button id="runCodeBtn">Try me!</button>

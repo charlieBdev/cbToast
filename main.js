@@ -25,11 +25,11 @@ document.getElementById('runCodeBtn').addEventListener('click', () => {
         const config = new Function(`return ${jsonString}`)();
 
         // 4. Fire the toast!
-        cbToast.show(config);
+        cbToast(config);
 
     } catch (err) {
         // 5. Show error toast if the user messed up the syntax
-        cbToast.show({
+        cbToast({
             title: 'Syntax Error',
             message: `Failed to parse config: ${err.message}`,
             type: 'error',
@@ -45,11 +45,11 @@ document.getElementById('runCodeBtn').addEventListener('click', () => {
 ========================================================================== */
 
 document.getElementById('defaultBtn').addEventListener('click', () => {
-    new cbToast();
+    cbToast();
 });
 
 document.getElementById('infoBtn').addEventListener('click', () => {
-    new cbToast({
+    cbToast({
         title: "Info",
         message: "This is an informational message.",
         type: "info",
@@ -61,7 +61,7 @@ document.getElementById('infoBtn').addEventListener('click', () => {
 });
 
 document.getElementById('successBtn').addEventListener('click', () => {
-    new cbToast({
+    cbToast({
         title: "Success",
         message: "Operation completed successfully!",
         type: "success",
@@ -73,7 +73,7 @@ document.getElementById('successBtn').addEventListener('click', () => {
 });
 
 document.getElementById('warningBtn').addEventListener('click', () => {
-    new cbToast({
+    cbToast({
         title: "Warning",
         message: "This is a warning message.",
         type: "warning",
@@ -85,7 +85,7 @@ document.getElementById('warningBtn').addEventListener('click', () => {
 });
 
 document.getElementById('errorBtn').addEventListener('click', () => {
-    new cbToast({
+    cbToast({
         title: "Error",
         message: "Something went wrong!",
         type: "error",
@@ -98,7 +98,7 @@ document.getElementById('errorBtn').addEventListener('click', () => {
 
 // 1. Test Bootstrap 5 Integration
 document.getElementById('bs5Btn').addEventListener('click', () => {
-    cbToast.show({
+    cbToast({
         title: 'Bootstrap Theme',
         message: 'Using --bs-primary and detecting dark mode.',
         type: 'default', // Will use Primary blue
@@ -108,7 +108,7 @@ document.getElementById('bs5Btn').addEventListener('click', () => {
 
 // 2. Test No Icon / No Title Layout
 document.getElementById('noIconBtn').addEventListener('click', () => {
-    cbToast.show({
+    cbToast({
         title: false, // Close button will move into the body
         icon: false,
         message: 'This is a minimal toast with no icon or title.',
@@ -118,7 +118,7 @@ document.getElementById('noIconBtn').addEventListener('click', () => {
 
 // 3. Test the Stack Limit (maxStack)
 document.getElementById('stackBtn').addEventListener('click', () => {
-    cbToast.show({
+    cbToast({
         title: 'Spam Test',
         message: 'Watching the oldest toast disappear...',
         type: 'warning',
@@ -169,7 +169,7 @@ document.getElementById('lightModeBtn').addEventListener('click', () => {
     const currentOptions = toastConfigs[currentIndex];
 
     // Trigger the toast
-    new cbToast({
+    cbToast({
         ...currentOptions, // Unpacks title, message, type, and position
         lightMode: true,   // Force light mode for this button
     });
