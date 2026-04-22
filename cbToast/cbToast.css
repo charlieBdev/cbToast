@@ -2,7 +2,7 @@
     1. TOAST CONTAINERS (Positioning & Stacking)
 ========================================================================== */
 .cb-toast-container {
-    position: fixed !important;
+    position: fixed;
     z-index: 9999;
     display: flex;
     flex-direction: column;
@@ -74,9 +74,13 @@
 .cb-toast-container.cb-toast-center .cb-toast { transform: scale(0.8); }
 
 /* Unique 'show' class to avoid Bootstrap conflicts */
-.cb-toast.cb-show {
+.cb-toast-container.cb-toast-top-right .cb-toast.cb-toast-show,
+.cb-toast-container.cb-toast-top-left .cb-toast.cb-toast-show,
+.cb-toast-container.cb-toast-bottom-right .cb-toast.cb-toast-show,
+.cb-toast-container.cb-toast-bottom-left .cb-toast.cb-toast-show,
+.cb-toast-container.cb-toast-center .cb-toast.cb-toast-show {
     opacity: 1;
-    transform: translate(0, 0) scale(1) !important;
+    transform: translate(0, 0) scale(1);
 }
 
 /* ==========================================================================
@@ -152,7 +156,7 @@
 }
 
 /* Unique state class for progress animation */
-.cb-toast.cb-shrinking .cb-toast-body::after {
+.cb-toast.cb-toast-shrinking .cb-toast-body::after {
     transform: scaleX(0);
     transition: transform var(--duration, 0ms) linear;
 }
@@ -187,11 +191,11 @@
 ========================================================================== */
 
 /* Coloured borders (fixes invisible borders in compiled BS projects) */
-.cb-toast-info    { border-color: #0dcaf0 !important; }
-.cb-toast-success { border-color: #198754 !important; }
-.cb-toast-warning { border-color: #ffc107 !important; }
-.cb-toast-error   { border-color: #dc3545 !important; }
-.cb-toast-default { border-color: #6c757d !important; }
+.cb-toast.cb-toast-info    { border-color: #0dcaf0; }
+.cb-toast.cb-toast-success { border-color: #198754; }
+.cb-toast.cb-toast-warning { border-color: #ffc107; }
+.cb-toast.cb-toast-error   { border-color: #dc3545; }
+.cb-toast.cb-toast-default { border-color: #6c757d; }
 
 /* Progress Bar Colors - Default */
 .cb-toast-default .cb-toast-body::after { background-color: #6c757d; }

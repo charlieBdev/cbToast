@@ -93,18 +93,19 @@ class _cbToast {
         const showIcon = this.options.icon && toastIcons[this.options.type];
 
         el.innerHTML = `
-        ${this.options.title ? `
-            <div class="cb-toast-header">
-                <div class="cb-toast-title-wrapper">
-                    ${showIcon ? `<span class="cb-toast-icon">${toastIcons[this.options.type]}</span>` : ''}
-                    <strong class="cb-toast-title">${this.options.title}</strong>
+            ${this.options.title ? `
+                <div class="cb-toast-header">
+                    <div class="cb-toast-title-wrapper">
+                        ${showIcon ? `<span class="cb-toast-icon">${toastIcons[this.options.type]}</span>` : ''}
+                        <strong class="cb-toast-title">${this.options.title}</strong>
+                    </div>
+                    ${closeBtnHtml}
+                </div>` : ''}
+                <div class="cb-toast-body">
+                    <div class="cb-toast-content">${this.options.message}</div>
+                    ${!this.options.title ? closeBtnHtml : ''}
                 </div>
-                ${closeBtnHtml}
-            </div>` : ''}
-            <div class="cb-toast-body">
-                <div class="cb-toast-content">${this.options.message}</div>
-                ${!this.options.title ? closeBtnHtml : ''}
-            </div>`;
+        `;
 
         this.container.appendChild(el);
 
@@ -117,8 +118,8 @@ class _cbToast {
 
                 if (this.options.countdown) {
                     body.style.setProperty('--duration', `${this.remaining}ms`);
-                    // Use unique state class cb-shrinking
-                    el.classList.add('cb-shrinking');
+                    // Use unique state class cb-toast-shrinking
+                    el.classList.add('cb-toast-shrinking');
                 }
             }
         };
@@ -132,8 +133,8 @@ class _cbToast {
             body.style.setProperty('--progress', currentProgress);
 
             this.remaining -= elapsed;
-            // Use unique state class cb-shrinking
-            el.classList.remove('cb-shrinking');
+            // Use unique state class cb-toast-shrinking
+            el.classList.remove('cb-toast-shrinking');
         };
 
         el.addEventListener('mouseenter', pauseTimer);
@@ -144,8 +145,8 @@ class _cbToast {
         });
 
         setTimeout(() => {
-            // Use unique state class cb-show
-            el.classList.add('cb-show');
+            // Use unique state class cb-toast-show
+            el.classList.add('cb-toast-show');
             startTimer();
         }, 10);
 
@@ -168,8 +169,8 @@ class _cbToast {
         }
 
         // Use unique state classes
-        el.classList.remove('cb-show');
-        el.classList.remove('cb-shrinking');
+        el.classList.remove('cb-toast-show');
+        el.classList.remove('cb-toast-shrinking');
 
         if (typeof this.options.onClose === 'function') {
             this.options.onClose();
